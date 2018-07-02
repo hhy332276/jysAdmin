@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>纸叠效果会员登录界面模板</title>
+<link rel="stylesheet" type="text/css" href="{% static 'registration/css/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'registration/css/body.css' %}"/>
+</head>
+<body>
+<form class="form" action="{% url 'login' %}" method="post">
+	  {% csrf_token %}
+
+
+</form>
+<div class="container">
+	<section id="content">
+		<form action="{% url 'login' %}" method="post">
+			{% csrf_token %}
+            <h1>可盈后台登录</h1>
+            {{ form.non_field_errors }}
+	  {% for field in form %}
+	    {{ field.label_tag }}
+	    {{ field }}
+	    {{ field.errors }}
+          <br/>
+          <div class="">
+				<span class="help-block u-errormessage" id="js-server-helpinfo">&nbsp;</span>			</div>
+			<div>
+	    {% if field.help_text %}
+	        <p class="help text-small text-muted">{{ field.help_text|safe }}</p>
+	    {% endif %}
+	  {% endfor %}
+{#			<div>#}
+{#				<input type="text" placeholder="邮箱" required="" id="username" />#}
+{#			</div>#}
+{#			<div>#}
+{#				<input type="password" placeholder="密码" required="" id="password" />#}
+{#			</div>#}
+
+				<!-- <input type="submit" value="Log in" /> -->
+{#				 <button type="submit" class="btn btn-primary btn-block">登录</button>#}
+                <input type="submit" value="登录" class="btn btn-primary" id="js-btn-login"/>
+				<a href="#">忘记密码?</a>
+				<!-- <a href="#">Register</a> -->
+			</div>
+		</form><!-- form -->
+
+	</section><!-- content -->
+</div>
+<!-- container -->
+
+
+<br><br><br><br>
+{#<div style="text-align:center;">#}
+{#<p>来源:More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a></p>#}
+{#</div>#}
+</body>
+</html>

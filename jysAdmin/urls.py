@@ -24,4 +24,5 @@ urlpatterns = [
                   url(r'^finance/', include('finance.urls', namespace='finance')),
                   url(r'^OPS/', include('OPS.urls', namespace='OPS')),
                   url(r'^operation/', include('operation.urls', namespace='operation')),
+                    url(r'^user/', include('django.contrib.auth.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

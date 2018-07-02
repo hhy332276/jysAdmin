@@ -83,10 +83,10 @@ WSGI_APPLICATION = 'jysAdmin.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 #数据库联用
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    # },
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
     'db1': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'jys',
@@ -101,7 +101,7 @@ DATABASES = {
         'PASSWORD': 'Qiqi2018_',
         "HOST": "rm-j6c7o95747bp853w0so.mysql.rds.aliyuncs.com",
     },
-    'default': {
+    'db3': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'wallet',
         'USER': 'qiqi',
@@ -117,7 +117,7 @@ DATABASE_APPS_MAPPING = {
     #'app_name':'database_name',
     'jys': 'db1',
     'qhjy': 'db2',
-    'wallet':'default'
+    'wallet':'db3'
 }
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -160,3 +160,10 @@ STATICFILES_DIRS=[os.path.join(BASE_DIR,'static')]
 #媒体文件存储
 MEDIA_URL= '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+#设置登录登出的跳转url
+from django.core.urlresolvers import reverse_lazy
+LOGIN_REDIRECT_URL = reverse_lazy('users:index')
+LOGOUT_REDIRECT_URL = reverse_lazy('login')
+LOGIN_URL = reverse_lazy('login')
+LOGOUT_URL=reverse_lazy('logout')
