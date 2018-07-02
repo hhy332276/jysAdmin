@@ -41,7 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'jys',
     'qhjy',
-    'wallet'
+    'wallet',
+    'users',
+    'finance',
+    'operation',
+    'OPS'
 ]
 
 MIDDLEWARE = [
@@ -59,7 +63,7 @@ ROOT_URLCONF = 'jysAdmin.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
