@@ -11,11 +11,13 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-
+import sys
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
+#优先在这三个目录下寻找文件
+sys.path.insert(0,os.path.join(BASE_DIR,'apps'))
+sys.path.insert(0,os.path.join(BASE_DIR,'extra_apps'))
+sys.path.insert(0,os.path.join(BASE_DIR,'local_apps'))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -37,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'jys',
+    'qhjy',
+    'wallet'
 ]
 
 MIDDLEWARE = [
@@ -72,15 +77,44 @@ WSGI_APPLICATION = 'jysAdmin.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
+#数据库联用
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # },
+    'db1': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'jys',
+        'USER': 'qiqi',
+        'PASSWORD': 'Qiqi2018_',
+        "HOST": "rm-j6c7o95747bp853w0so.mysql.rds.aliyuncs.com",
+    },
+    'db2': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'qhjy',
+        'USER': 'qiqi',
+        'PASSWORD': 'Qiqi2018_',
+        "HOST": "rm-j6c7o95747bp853w0so.mysql.rds.aliyuncs.com",
+    },
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'wallet',
+        'USER': 'qiqi',
+        'PASSWORD': 'Qiqi2018_',
+        "HOST": "rm-j6c7o95747bp853w0so.mysql.rds.aliyuncs.com",
+    },
 }
-
-
+#引入数据库联用的配置文件
+DATABASE_ROUTERS = ['jysAdmin.database_router.DatabaseAppsRouter']
+#数据库联用的配置
+DATABASE_APPS_MAPPING = {
+    # example:
+    #'app_name':'database_name',
+    'jys': 'db1',
+    'qhjy': 'db2',
+    'wallet':'default'
+}
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -103,18 +137,22 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'zh-hans'
+#时间改为上海时间
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_L10N = True
-
-USE_TZ = True
+#不使用UTC时间
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-
+#静态文件存储
 STATIC_URL = '/static/'
+STATICFILES_DIRS=[os.path.join(BASE_DIR,'static')]
+#媒体文件存储
+MEDIA_URL= '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
