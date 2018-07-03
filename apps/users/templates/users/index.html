@@ -1,1 +1,185 @@
 {% extends 'users/base.html' %}
+{% load user_tags %}
+{% block ext_style %}
+    <style>
+        .layui-body{overflow-y: scroll;}
+    </style>
+{% endblock %}
+{% block content %}
+
+    <table class="layui-table" lay-size="lg" style="text-align: center" >
+        <colgroup>
+            <col width="33%">
+            <col width="33%">
+            <col>
+        </colgroup>
+<thead >
+    <tr >
+      <th style="text-align: center">分类</th>
+      <th style="text-align: center">数量</th>
+      <th style="text-align: center">操作</th>
+    </tr>
+  </thead>
+        <tbody>
+        <tr>
+            <td >总用户数量</td>
+            <td id="allCount"></td>
+            <td><a href="{% url 'users:index' 4 %}">查看详情</a></td>
+        </tr>
+        <tr>
+            <td>今日新增用户数量</td>
+            <td id="addCount"></td>
+            <a href="#">
+                <td><a href="{% url 'users:index' 1 %}">查看详情</a></td>
+            </a>
+        </tr>
+        <tr>
+            <td>今日活跃用户数量</td>
+            <td id="activeCount"></td>
+            <a href="#">
+                <td><a href="{% url 'users:index' 2 %}">查看详情</a></td>
+            </a>
+        </tr>
+        <tr>
+            <td>当前在线用户数</td>
+            <td id="count"></td>
+            <a href="{% url 'users:index' 3 %}">
+                <td><a href="">查看详情</a></td>
+            </a>
+        </tr>
+
+        </tbody>
+    </table>
+
+    <form action="{% url 'users:search' %}" id="searchform" method="get">
+<div class="demoTable">
+    根据ID或用户名搜索：
+  <div class="layui-inline">
+    <input class="layui-input" name="id" id="demoReload" autocomplete="off">
+  </div>
+  <button class="layui-btn" data-type="reload">搜索</button>
+</div>
+
+</form>
+    <table class="layui-table" lay-size="md" style="text-align: center">
+{#  <colgroup>#}
+{#    <col width="150">#}
+{#    <col width="200">#}
+{#    <col>#}
+{#  </colgroup>#}
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>用户名</th>
+{#          <th>会员等级</th>#}
+{#          <th>实名认证</th>#}
+      <th>剩余BTC数量</th>
+        <th>冻结BTC数量</th>
+        <th>剩余ETH数量</th>
+        <th>冻结ETH数量</th>
+{#        <th>冻结BTC数量</th>#}
+         <th>最后登录时间</th>
+        <th>最后投注时间</th>
+        <th>投注详情</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for user in user_list %}
+
+  <tr>
+      <td class="user_id">{{ user.id }}</td>
+      <td>{{ user.username }}</td>
+      <td class="btc_avalable"></td>
+      <td class="btc_freeze"></td>
+      <td class="eth_avalable"></td>
+      <td class="eth_freeze"></td>
+  <td>{{ user.login_time | time_cover }}</td>
+  <td></td>
+  <td><a href="#">点击查看</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{#    <div>#}
+{#  <span>#}
+{#    {% if page.has_previous %}#}
+{#      <a href="?page={{ page.previous_page_number }}">shang</a>#}
+{#    {% endif %}#}
+{#    <span>#}
+{#      Page {{ page.number }} of {{ page.paginator.num_pages }}.#}
+{#    </span>#}
+{#      {% if page.has_next %}#}
+{#        <a href="?page={{ page.next_page_number }}">Next</a>#}
+{#      {% endif %}#}
+{#  </span>#}
+{#</div>#}
+
+<ul class="pagination">
+                <li class="">   {% if second_list_obj.has_previous %}
+               <a href="?id={{ id }}&page={{ second_list_obj.previous_page_number }}&hostlist_search_q={{ hostlist_search_q }}">上一页</a>
+                {% endif %}
+                </li>
+                    <li class=" "><span>第{{ second_list_obj.number }}页 | 共{{ p.num_pages}}页</span></li>
+                <li class="">
+                    {% if second_list_obj.has_next %}
+                        <a href="?id={{ id }}&page={{ second_list_obj.next_page_number }}&hostlist_search_q={{ hostlist_search_q }}">下一页</a>
+                    {% endif %}
+                </li>
+            </ul>
+<span style="color: #8c8c8c"> 总计{{ second_list_obj.paginator.count }}条数据,总计{{ second_list_obj.paginator.num_pages }}页</span>
+
+{% endblock %}
+{% block ext_scripts %}
+    <script>
+        $(function () {
+            var user_id_list=$('.user_id')
+            for (var i=0;i<user_id_list.length;i++)
+{
+    let id_e=$(user_id_list[i]).parent().children()
+    id=user_id_list[i].innerHTML
+    $.get("{% url 'jsona:user_data' %}", { user_id:id },
+  function(data){
+        console.log(id_e[2]);
+        {#console.log(id_e.parent());#}
+        var d2=data.data;
+        {#console.log()#}
+      {#console.log(d2.btc_avalable);#}
+        $(id_e[2]).html(d2.btc_avalable);
+                    $(id_e[3]).html(d2.btc_freeze);
+                    $(id_e[4]).html(d2.eth_avalable);
+                    $(id_e[5]).html(d2.eth_freeze);
+                    $(id_e[7]).html(d2.last_bet_time);
+
+  });
+}
+            $.get("{% url 'jsona:user_overview' %}", function(data){
+                    var d=data.data;
+                    $('#allCount').html(d.allCount);
+                    $('#addCount').html(d.addCount);
+                    $('#activeCount').html(d.activeCount);
+                    $('#count').html(d.count);
+        })});
+        setTimeout(function () {
+                $.get("{% url 'jsona:user_overview' %}", function(data){
+                    var d=data.data;
+                    $('#allCount').html(d.allCount);
+                    $('#addCount').html(d.addCount);
+                    $('#activeCount').html(d.activeCount);
+                    $('#count').html(d.count);
+
+            });},
+            200);
+        /*30轮询读取函数*/
+        setInterval(function () {
+               $.get("{% url 'jsona:user_overview' %}", function(data){
+                var d=data.data;
+                    $('#allCount').html(d.allCount);
+                    $('#addCount').html(d.addCount);
+                    $('#activeCount').html(d.activeCount);
+                    $('#count').html(d.count);
+            });},
+            10000);
+    </script>
+
+{% endblock %}

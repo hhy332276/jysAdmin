@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'users',
     'finance',
     'operation',
-    'OPS'
+    'OPS',
+    'jsona'
 ]
 
 MIDDLEWARE = [
